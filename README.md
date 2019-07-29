@@ -1,6 +1,6 @@
 `game.getTitle();`
 
-[![Build Status](http://deco2800.uqcloud.net/jenkins/job/deco2800-2018-thomas/badge/icon)](http://deco2800.uqcloud.net/jenkins/job/deco2800-2018-thomas/)
+[![Build Status](http://deco2800.uqcloud.net/jenkins/job/2019-studio2-Jack/badge/icon)](http://deco2800.uqcloud.net/jenkins/job/2019-studio2-Jack/)
 
 `Description of the game...` 
 

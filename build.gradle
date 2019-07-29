@@ -15,10 +15,10 @@ apply plugin: 'idea'
 apply plugin: 'jacoco'
 
 allprojects {
-	group = 'deco2800-2018-ragnarok'
+	group = 'deco2800-2019-ragnarok'
     version = '0.1'
     ext {
-        appName = "deco2800-2018-ragnarok"
+        appName = "deco2800-2019-ragnarok"
         gdxVersion = '1.9.6'
         roboVMVersion = '2.3.1'
         box2DLightsVersion = '1.4'
