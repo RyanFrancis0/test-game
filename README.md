@@ -7,7 +7,7 @@
 ### Buttons
 **F12** - Show/hide debug information
 
-**F11** - Show/hide tile cordinates
+**F11** - Show/hide tile coordinates
 
 **F10** - Show/hide entity paths
 
