@@ -12,6 +12,7 @@ import deco2800.ragnarok.entities.Peon;
 import deco2800.ragnarok.handlers.KeyboardManager;
 import deco2800.ragnarok.managers.*;
 import deco2800.ragnarok.observers.KeyDownObserver;
+import deco2800.ragnarok.observers.ScrollObserver;
 import deco2800.ragnarok.renderers.PotateCamera;
 import deco2800.ragnarok.renderers.OverlayRenderer;
 import deco2800.ragnarok.renderers.Renderer3D;
@@ -22,7 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GameScreen implements Screen,KeyDownObserver {
+public class GameScreen implements Screen, KeyDownObserver, ScrollObserver {
 	private final Logger LOG = LoggerFactory.getLogger(Renderer3D.class);
 	@SuppressWarnings("unused")
 	private final ThomasGame game;
@@ -59,7 +60,7 @@ public class GameScreen implements Screen,KeyDownObserver {
 			GameManager.get().getManager(NetworkManager.class).connectToHost("localhost", "duck1234");
 		} else {
 			world = new TestWorld();
-			GameManager.get().getManager(NetworkManager.class).startHosting("host");
+			//GameManager.get().getManager(NetworkManager.class).startHosting("host");
 		}
 
 		gameManager.setWorld(world);
@@ -227,7 +228,7 @@ public class GameScreen implements Screen,KeyDownObserver {
 	//timmeh to fix hack.  // fps is not updated cycle by cycle
 		float normilisedGameSpeed = (60.0f/Gdx.graphics.getFramesPerSecond());
 				
-		int goFastSpeed = (int) (5 * normilisedGameSpeed *camera.zoom);
+		int goFastSpeed = (int) (5 * normilisedGameSpeed * camera.zoom);
 		
 		if (!camera.isPotate()) {
 			
@@ -263,5 +264,18 @@ public class GameScreen implements Screen,KeyDownObserver {
 			}
 		}
 		
+	}
+
+	@Override
+	public void notifyScrolled(int amount) {
+		float normilisedGameSpeed = (60.0f/Gdx.graphics.getFramesPerSecond());
+		if (amount == 1) {
+			camera.zoom *=1-0.01 * normilisedGameSpeed;
+			if (camera.zoom < 0.5) {
+				camera.zoom = 0.5f;
+			}
+		} else {
+			camera.zoom *=1+0.01*normilisedGameSpeed;
+		}
 	}
 }

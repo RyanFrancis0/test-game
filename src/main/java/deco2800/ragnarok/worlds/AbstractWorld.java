@@ -6,10 +6,7 @@ import deco2800.ragnarok.entities.StaticEntity;
 import deco2800.ragnarok.managers.GameManager;
 import deco2800.ragnarok.util.HexVector;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.*;
 
@@ -47,13 +44,13 @@ public abstract class AbstractWorld {
 		Map<Integer, Tile> columnMap;
 		for(Tile tile : tiles) {
 			columnMap = tileMap.getOrDefault((int)tile.getCol()*2, new HashMap<Integer, Tile>());
-			columnMap.put((int) (tile.getRow()*2), tile);
-			tileMap.put((int) (tile.getCol()*2), columnMap);
+			columnMap.put((int) (tile.getRow() * 2), tile);
+			tileMap.put((int) (tile.getCol() * 2), columnMap);
 		}
 		
 		for(Tile tile : tiles) {
-			int col = (int) (tile.getCol()*2);
-			int row = (int) (tile.getRow()*2);
+			int col = (int) (tile.getCol() * 2);
+			int row = (int) (tile.getRow() * 2);
 			
 			//West
 			if(tileMap.containsKey(col - 2)) {
@@ -64,12 +61,12 @@ public abstract class AbstractWorld {
 				
 				//South West
 				if (tileMap.get(col - 2).containsKey(row -  1)) {
-					tile.addNeighbour(Tile.SOUTH_WEST,tileMap.get(col -2).get(row - 1));
+					tile.addNeighbour(Tile.SOUTH_WEST,tileMap.get(col - 2).get(row - 1));
 				}
 			}
 			
 			//Central
-			if(tileMap.containsKey(col)) {
+			if (tileMap.containsKey(col)) {
 				//North
 				if (tileMap.get(col).containsKey(row + 2)) {
 					tile.addNeighbour(Tile.NORTH,tileMap.get(col).get(row + 2));
@@ -82,10 +79,10 @@ public abstract class AbstractWorld {
 			}
 			
 			//East
-			if(tileMap.containsKey(col + 2)) {
+			if (tileMap.containsKey(col + 2)) {
 				//North East
 				if (tileMap.get(col + 2).containsKey(row+1)) {
-					tile.addNeighbour(Tile.NORTH_EAST,tileMap.get(col + 2).get(row+1));
+					tile.addNeighbour(Tile.NORTH_EAST, tileMap.get(col + 2).get(row+1));
 				}
 				
 				//South East
@@ -94,6 +91,50 @@ public abstract class AbstractWorld {
 				}
 			}
 		}
+		//set finished shape of land and sea
+        LinkedList<Tile> queue = new LinkedList<Tile>();
+        Set<Tile> closedSet = new HashSet<Tile>();
+        queue.add(tiles.get(0));
+        Random random = new Random();
+        Tile root;
+        while (!queue.isEmpty()) {
+            //log.info("Queue: {}    Closed: {}", queue.size(), closedSet.size());
+            root = queue.remove();
+        //for (Tile root : tiles) {
+            if (closedSet.contains(root)) {
+                continue;
+            }
+            for (Tile child : root.getNeighbours().values()) {
+                if (closedSet.contains(child)/* || queue.contains(child)*/) {
+                    continue;
+                }
+                queue.add(child);
+                if (!(child.getTextureName().equals(root.getTextureName()))
+                        //&& !(child.getTextureName().equals("water_1"))
+                        && (random.nextInt(10) < 7)) {
+                    child.setTexture(root.getTextureName());
+                }
+            }
+            closedSet.add(root);
+        }
+        //post production
+
+        //add deep water sprite
+        for (Tile tile : tiles) {
+            if (tile.getTextureName().equals("water_1")) {
+                boolean brk = false;
+                for (Tile child : tile.getNeighbours().values()) {
+                    if (!(child.getTextureName().equals("water_1") || child.getTextureName().equals("water_2"))) {
+                        brk = true;
+                        break;
+                    }
+                }
+                if (!brk) {
+                    tile.setTexture("water_2");
+                }
+            }
+        }
+
     }
     
     private void generateTileIndexes() {

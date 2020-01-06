@@ -8,9 +8,6 @@ public abstract class AgentEntity extends AbstractEntity{
 	@Expose
 	protected float speed;
 
-	
-
-
 	public AgentEntity(float col, float row, int renderOrder, float speed) {
 		super(col, row, renderOrder);
 		

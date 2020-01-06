@@ -161,7 +161,7 @@ public final class DatabaseManager extends AbstractManager {
             while (reader.hasNext()) {
             	reader.beginObject();
                 
-                Tile tile = new Tile("textureName", 0,0);
+                Tile tile = new Tile("textureName", 0, 0, false);
                 while (reader.hasNext()) {
                     checkBasicTileSettings(tile,reader.nextName(),reader);
                 }

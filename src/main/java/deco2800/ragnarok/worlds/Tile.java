@@ -13,7 +13,7 @@ import deco2800.ragnarok.managers.NetworkManager;
 import deco2800.ragnarok.managers.TextureManager;
 import deco2800.ragnarok.util.HexVector;
 
-public class Tile{
+public class Tile {
 	private static int nextID = 0;
 
 	private static int getNextID() {
@@ -53,10 +53,11 @@ public class Tile{
     private int tileID = 0;
     
     public Tile(String texture) {
-        this(texture, 0, 0);
+        this(texture, 0, 0, false);
     }
 
-    public Tile(String texture, float col, float row) {
+    public Tile(String texture, float col, float row, boolean obstructed) {
+    	this.obstructed = obstructed;
         this.texture = texture;
         coords = new HexVector(col, row);
         this.neighbours = new HashMap<Integer,Tile>();
@@ -186,7 +187,6 @@ public class Tile{
 
 	public void setObstructed(boolean b) {
 		obstructed = b;
-		
 	}
 
 
